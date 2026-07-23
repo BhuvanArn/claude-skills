@@ -8,7 +8,12 @@ Each skill is a folder under [`skills/`](skills/) containing a `SKILL.md` with Y
 
 | Skill | What it does |
 |-------|--------------|
-| [`revue`](skills/revue/SKILL.md) | Pre-commit review that judges whether a diff is the **right** change — scope, contracts, simplicity, and intent-alignment — not just one that passes CI. Complements bug-hunting reviews. |
+| [`pre-commit-review`](skills/pre-commit-review/SKILL.md) | **Project-agnostic** (English) pre-commit review that judges whether a diff is the **right** change — scope, contracts, simplicity, and intent-alignment — not just one that passes CI. Drop into any repo. |
+| [`revue`](skills/revue/SKILL.md) | The original French version, tailored to the **Ascendancy** Unity/C# project. Same structure, project-specific references. |
+
+### `pre-commit-review` — the portable version
+
+Start here for any project. It's the generalized, English form of `revue`: same intent → diff → 9 questions → verdict structure, with no references to any specific codebase. Nothing to swap — copy it in and it works.
 
 ### `revue` — "is this the *right* change?"
 
@@ -27,14 +32,14 @@ A pre-commit review skill (written in French) built for the **Ascendancy** Unity
 
 ```bash
 mkdir -p your-project/.claude/skills
-cp -r skills/revue your-project/.claude/skills/
+cp -r skills/pre-commit-review your-project/.claude/skills/
 ```
 
 **Globally (all projects)** — copy it into your user skills directory:
 
 ```bash
 mkdir -p ~/.claude/skills
-cp -r skills/revue ~/.claude/skills/
+cp -r skills/pre-commit-review ~/.claude/skills/
 ```
 
 Claude Code discovers the skill automatically. It triggers on the phrases in the skill's `description`, or you can invoke it explicitly (e.g. `/revue`).
