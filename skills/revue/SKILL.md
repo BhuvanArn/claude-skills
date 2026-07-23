@@ -1,7 +1,7 @@
 ---
 name: revue
 description: >
-  Revue pré-commit du diff courant pour Ascendancy — vérifie que c'est le BON changement,
+  Revue pré-commit du diff courant pour un projet Unity — vérifie que c'est le BON changement,
   pas seulement un changement qui passe. Utiliser AVANT tout commit non trivial, quand
   l'utilisateur dit "revue", "review", "vérifie avant de committer", "est-ce le bon
   changement", ou demande si le travail est prêt à être commité/pushé. À utiliser aussi
