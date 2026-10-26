@@ -2,7 +2,8 @@
 name: pr-revue-smoke
 description: >
   Méthode pour toute nouvelle PR, dans n'importe quel dépôt : la PR s'ouvre en brouillon
-  (draft), deux sous-agents la relisent (la forme, puis le code), un troisième fait le
+  (draft), deux sous-agents la relisent l'un après l'autre (la forme, puis le code), un
+  troisième fait le
   smoke, et seulement ensuite elle passe « ready for review ». À utiliser dès qu'on ouvre
   ou crée une PR / pull request (`gh pr create`), et quand l'utilisateur demande de passer
   une PR en ready (« prête », « ready for review »), de « lancer les revues » ou « le smoke »
@@ -45,14 +46,19 @@ Diff de plus de ~400 lignes hors fichiers générés : proposer de le découper 
 passes, une revue sur un gros diff survole. PR empilée : `--base <branche parente>`,
 chaque PR relue sur son seul diff, et passée ready de la plus basse à la plus haute.
 
-## 2. Deux sous-agents de revue
+## 2. Deux sous-agents de revue, l'un après l'autre
 
-Lancés ensemble, dans le même message, `subagent_type: general-purpose`, en lecture
-seule (ils ne modifient, ne commitent ni ne poussent rien). Avant de les lancer, se placer
-sur la branche de la PR (`gh pr checkout <N>`) : ils lisent l'arbre de travail. Chacun
-reçoit : le numéro et la branche, la commande `gh pr diff <N>` (fonctionne aussi depuis
-un fork), la description de la PR et le besoin d'origine (issue liée, demande de
-l'utilisateur), l'axe ci-dessous, et la consigne :
+**Successifs, jamais en parallèle** : la revue de forme d'abord, ses corrections
+poussées, puis la revue de code sur la nouvelle tête. Ainsi la seconde relit le code
+final et attrape ce que la première a laissé passer ou ce que ses corrections ont cassé ;
+en parallèle, elle polirait du code qui va être réécrit.
+
+Chaque sous-agent : `subagent_type: general-purpose`, en lecture seule (il ne modifie, ne
+commite ni ne pousse rien). Avant de le lancer, se placer sur la branche de la PR
+(`gh pr checkout <N>`, puis `git pull`) : il lit l'arbre de travail. Il reçoit : le numéro
+et la branche, la commande `gh pr diff <N>` (fonctionne aussi depuis un fork), la
+description de la PR et le besoin d'origine (issue liée, demande de l'utilisateur),
+l'axe ci-dessous, et la consigne :
 
 > Vérifier chaque constat dans le code avant de l'écrire. Chaque constat avec
 > `fichier:ligne`, le défaut, pourquoi il compte, la correction, et l'étiquette
@@ -68,19 +74,36 @@ souffle l'hypothèse la confirme.
 | 1 : la forme | Bonne approche pour le besoin ? La plus simple possible ? Réutilise l'existant (recherche dans le code) plutôt que de dupliquer ? Suit les précédents et les règles d'architecture du dépôt ? Périmètre : rien hors sujet dans le diff ? La doc et les notes de décision voyagent avec le code ? Si le diff touche aux droits, aux migrations, aux secrets ou à l'authentification : skill de sécurité du dépôt, ou `security-review`, en plus. |
 | 2 : le code | Skill de revue de code du dépôt s'il existe, sinon `code-review high <N>` (sans `--fix` ni `--comment`), constats reformulés en `MECHANICAL`/`DECISION` : justesse, cas d'erreur et limites, tests (ce qu'ils prouvent vraiment, comportement resté sans test), commentaires vrais et qui disent pourquoi, code mort, secrets ou données personnelles dans les journaux. |
 
-Si la revue de forme change la forme du code, relancer la revue de code après la
-correction : sinon elle a poli ce qui a été réécrit.
+Le second sous-agent reçoit en plus la liste des commits de correction issus de la
+première revue, avec la consigne de les relire comme le reste du diff, sans les tenir pour
+acquis. S'il remet en cause la forme elle-même (pas seulement le code), relancer une
+revue de forme après correction.
 
-## 3. Trier et corriger
+## 3. Trier et corriger (après chaque revue)
+
+L'ordre est : revue de forme → tri et corrections → push → revue de code → tri et
+corrections → push → smoke.
 
 - Revérifier soi-même chaque constat dans le code avant d'agir. Un faux constat ne
   s'applique pas ; le dire.
 - `MECHANICAL` : corriger, avec le test qui l'aurait attrapé quand c'est possible.
 - `DECISION` : présenter à l'utilisateur, options et recommandation, et attendre. Une
   décision produit se range aussi dans « Ce qui reste à décider » de la description.
-- Commande de vérification du dépôt une fois tout corrigé, puis **un seul** push.
+- Commande de vérification du dépôt une fois les constats de la revue corrigés, puis
+  **un seul** push par revue.
 - Un commentaire court par revue sur la PR : ce qui a été couvert, corrigé (commits),
   laissé en décision. Dans le registre du public de la PR.
+
+**Tout commentaire posté par l'agent** (revue, smoke, réponse à un relecteur, sur la PR
+comme sur une issue) s'ouvre par une en-tête qui dit qu'un agent écrit, au nom de qui :
+
+```markdown
+> 🤖 *Claude écrit à la place de <utilisateur>.*
+```
+
+`<utilisateur>` est le prénom de l'utilisateur s'il est connu, sinon son identifiant
+GitHub (`gh api user --jq .login`). Un lecteur doit savoir, sans ouvrir l'historique, que
+le texte n'a pas été tapé par la personne dont le compte le poste.
 
 ## 4. Un sous-agent de smoke
 

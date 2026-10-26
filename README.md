@@ -10,7 +10,7 @@ Each skill is a folder under [`skills/`](skills/) containing a `SKILL.md` with Y
 |-------|--------------|
 | [`pre-commit-review`](skills/pre-commit-review/SKILL.md) | **Project-agnostic** (English) pre-commit review that judges whether a diff is the **right** change — scope, contracts, simplicity, and intent-alignment — not just one that passes CI. Drop into any repo. |
 | [`revue`](skills/revue/SKILL.md) | A French fine-tune of `pre-commit-review` for a Unity/C# project. Same structure, project-specific references. |
-| [`pr-revue-smoke`](skills/pr-revue-smoke/SKILL.md) | **Project-agnostic** (French) PR workflow: open as draft, two read-only subagent reviews (design, then code), one smoke-test subagent, and only then `gh pr ready`. Install it in `~/.claude/skills/` (a personal method, not a repo rule). Assumes GitHub + `gh`. |
+| [`pr-revue-smoke`](skills/pr-revue-smoke/SKILL.md) | **Project-agnostic** (French) PR workflow: open as draft, two read-only subagent reviews run one after the other (design, then code, so the second catches what the first missed or broke), one smoke-test subagent, and only then `gh pr ready`. Every comment the agent posts carries a header saying Claude writes on the user's behalf. Install it in `~/.claude/skills/` (a personal method, not a repo rule). Assumes GitHub + `gh`. |
 
 ### `pre-commit-review` — the portable version
 
