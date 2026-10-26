@@ -148,8 +148,9 @@ Puis `gh pr ready <N>`. Ne pas fusionner : la fusion suit la règle du dépôt.
 
 ## Pour l'activer partout
 
-Installer le skill dans `~/.claude/skills/`, pas dans le `.claude/skills/` d'un dépôt :
-versionné là, il deviendrait une règle imposée aux autres contributeurs. Puis ajouter une
+Installer le skill au niveau utilisateur (plugin `pr-revue-smoke@bhuvan-skills` en portée
+« user », ou copie dans `~/.claude/skills/`), pas dans le `.claude/skills/` d'un dépôt ni
+en portée « project » : versionné là, il deviendrait une règle imposée aux autres contributeurs. Puis ajouter une
 ligne au `~/.claude/CLAUDE.md` personnel :
 
 ```markdown

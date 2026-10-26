@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
+  "name": "bhuvan-skills",
+  "description": "Claude Code skills for checking changes before they ship: a pre-commit review (English and French) and a draft-PR workflow with agent reviews and a smoke test.",
+  "owner": {
+    "name": "Bhuvan Arnaud",
+    "url": "https://github.com/BhuvanArn"
+  },
+  "plugins": [
+    {
+      "name": "pre-commit-review",
+      "source": "./",
+      "strict": false,
+      "skills": ["./skills/pre-commit-review"],
+      "description": "Pre-commit review that judges whether a diff is the right change (scope, contracts, simplicity, intent), not just one that passes CI.",
+      "category": "code-review",
+      "license": "MIT"
+    },
+    {
+      "name": "revue",
+      "source": "./",
+      "strict": false,
+      "skills": ["./skills/revue"],
+      "description": "French version of pre-commit-review: judges whether a diff is the right change before committing.",
+      "category": "code-review",
+      "license": "MIT"
+    },
+    {
+      "name": "pr-revue-smoke",
+      "source": "./",
+      "strict": false,
+      "skills": ["./skills/pr-revue-smoke"],
+      "description": "French PR workflow: open as draft, two sequential subagent reviews (design, then code), a smoke-test subagent, then gh pr ready.",
+      "category": "code-review",
+      "license": "MIT"
+    }
+  ]
+}
