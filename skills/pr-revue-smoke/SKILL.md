@@ -3,9 +3,8 @@ name: pr-revue-smoke
 description: >
   Méthode pour toute nouvelle PR, dans n'importe quel dépôt : la PR s'ouvre en brouillon
   (draft), deux sous-agents la relisent l'un après l'autre (la forme, puis le code), un
-  troisième fait le
-  smoke, et seulement ensuite elle passe « ready for review ». À utiliser dès qu'on ouvre
-  ou crée une PR / pull request (`gh pr create`), et quand l'utilisateur demande de passer
+  troisième fait le smoke, et seulement ensuite elle passe « ready for review ». À utiliser dès
+  qu'on ouvre ou crée une PR / pull request (`gh pr create`), et quand l'utilisateur demande de passer
   une PR en ready (« prête », « ready for review »), de « lancer les revues » ou « le smoke »
   d'une PR. Suppose GitHub et `gh`.
 ---
